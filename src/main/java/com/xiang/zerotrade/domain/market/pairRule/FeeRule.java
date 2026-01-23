@@ -1,4 +1,4 @@
-package com.xiang.zerotrade.domain.model.market;
+package com.xiang.zerotrade.domain.market.pairRule;
 
 import java.math.BigDecimal;
 
@@ -9,6 +9,5 @@ import java.math.BigDecimal;
 public record FeeRule(
         BigDecimal makerFeeRate,
         BigDecimal takerFeeRate
-
 ) {
 }

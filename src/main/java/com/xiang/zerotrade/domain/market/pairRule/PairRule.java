@@ -1,4 +1,4 @@
-package com.xiang.zerotrade.domain.model.market;
+package com.xiang.zerotrade.domain.market.pairRule;
 
 /**
  * @author linshunxiang

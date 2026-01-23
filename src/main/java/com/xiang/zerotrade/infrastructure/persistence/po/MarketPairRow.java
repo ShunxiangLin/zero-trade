@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 /**
  * @author linshunxiang
  */
-
 @Data
 public class MarketPairRow {
     // market_pair
@@ -24,6 +23,8 @@ public class MarketPairRow {
     private Long prId;
     private BigDecimal prTickSize;
     private BigDecimal prStepSize;
+
+    private BigDecimal prMinPrice;
     private BigDecimal prMinQty;
     private BigDecimal prMaxQty;
     private BigDecimal prMinNotional;
@@ -33,7 +34,6 @@ public class MarketPairRow {
     private BigDecimal prTakerFeeRate;
 
     private BigDecimal prContractSize;
-    private Integer prMaxLeverage;
 
     private Long prUpdatedAt;
 }
