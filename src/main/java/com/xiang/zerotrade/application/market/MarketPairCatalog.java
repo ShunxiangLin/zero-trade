@@ -1,6 +1,6 @@
 package com.xiang.zerotrade.application.market;
 
-import com.xiang.zerotrade.domain.market.pair.MarketPair;
+import com.xiang.zerotrade.domain.temp.pair.MarketPair;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

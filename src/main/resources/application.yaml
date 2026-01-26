@@ -1,3 +1,12 @@
 spring:
   application:
     name: zero-trade
+  datasource:
+    url: jdbc:mysql://localhost:3306/zen_trade?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: Xinjiku.1
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true

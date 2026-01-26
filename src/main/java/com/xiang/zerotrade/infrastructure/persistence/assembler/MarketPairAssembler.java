@@ -1,12 +1,12 @@
 package com.xiang.zerotrade.infrastructure.persistence.assembler;
 
-import com.xiang.zerotrade.domain.market.enums.MarketType;
-import com.xiang.zerotrade.domain.market.pair.MarketPair;
-import com.xiang.zerotrade.domain.market.pair.Pair;
-import com.xiang.zerotrade.domain.market.pairRule.ContractRule;
-import com.xiang.zerotrade.domain.market.pairRule.FeeRule;
-import com.xiang.zerotrade.domain.market.pairRule.PairRule;
-import com.xiang.zerotrade.domain.market.pairRule.TradeRule;
+import com.xiang.zerotrade.domain.temp.enums.MarketType;
+import com.xiang.zerotrade.domain.temp.pair.MarketPair;
+import com.xiang.zerotrade.domain.temp.pair.Pair;
+import com.xiang.zerotrade.domain.temp.pairRule.ContractRule;
+import com.xiang.zerotrade.domain.temp.pairRule.FeeRule;
+import com.xiang.zerotrade.domain.temp.pairRule.PairRule;
+import com.xiang.zerotrade.domain.temp.pairRule.TradeRule;
 import com.xiang.zerotrade.infrastructure.persistence.po.MarketPairRow;
 
 /**
