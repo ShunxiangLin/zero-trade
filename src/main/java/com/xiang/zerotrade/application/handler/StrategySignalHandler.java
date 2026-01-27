@@ -32,15 +32,6 @@ public class StrategySignalHandler implements EventHandler<Event> {
 
     @Override
     public void handle(Event event) {
-        Logs.APP.info(JsonLog.toJson(Map.of(
-                "ts", System.currentTimeMillis(),
-                "scene", "HANDLER",
-                "eventType", event.eventType().name(),
-                "symbol", event.symbol(),
-                "payload", event.payload(),
-                "msg", "strategy signal handled (next: place order later)"
-        )));
-
         // P0先不下单，只打印模拟：
         // 后面你要做 ORDER_REQUEST 时，就在这里 bus.publish(ORDER_REQUEST, orderReq)
 
@@ -53,14 +44,6 @@ public class StrategySignalHandler implements EventHandler<Event> {
                 "side=BUY;qty=1;reason=strategySignal"
         );
 
-        Logs.APP.info(JsonLog.toJson(Map.of(
-                "ts", System.currentTimeMillis(),
-                "scene", "BUS",
-                "eventType", orderReq.eventType().name(),
-                "symbol", orderReq.symbol(),
-                "payload", orderReq.payload(),
-                "msg", "publish order request"
-        )));
 
         bus.publish(EventType.ORDER_REQUEST, orderReq);
     }

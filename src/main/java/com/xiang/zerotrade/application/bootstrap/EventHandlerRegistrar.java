@@ -19,17 +19,14 @@ public class EventHandlerRegistrar {
     private final EventBus bus;
     private final List<EventHandler<?>> handlers;
 
+    /**
+     * 开机订阅 所有注册的handler
+     */
     @PostConstruct
     public void registerAll() {
         for (EventHandler<?> h : handlers) {
-            register(h);
+            bus.subscribe(h.eventType(), h.name(), h::handle);
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private <E> void register(EventHandler<?> raw) {
-        EventHandler<E> h = (EventHandler<E>) raw;
-        bus.subscribe(h.eventType(), h.name(), h::handle);
     }
 
 

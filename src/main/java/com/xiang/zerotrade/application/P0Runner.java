@@ -28,12 +28,12 @@ public class P0Runner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         String traceId = Trace.newTraceId();
 
-        Logs.APP.info(JsonLog.toJson(Map.of(
-                LogKeys.TS, System.currentTimeMillis(),
-                LogKeys.SCENE, "STARTUP",
-                LogKeys.TRACE_ID, traceId,
-                LogKeys.MSG, "P0Runner started"
-        )));
+//        Logs.APP.info(JsonLog.toJson(Map.of(
+//                LogKeys.TS, System.currentTimeMillis(),
+//                LogKeys.SCENE, "STARTUP",
+//                LogKeys.TRACE_ID, traceId,
+//                LogKeys.MSG, "P0Runner started"
+//        )));
 
         for (int i = 0; i < 5; i++) {
             Event tick = new Event(
@@ -44,15 +44,15 @@ public class P0Runner implements CommandLineRunner {
                     "price=" + (65000 + r.nextInt(2000))
             );
 
-            Logs.APP.info(JsonLog.toJson(Map.of(
-                    LogKeys.TS, System.currentTimeMillis(),
-                    LogKeys.SCENE, "BUS",
-                    LogKeys.TRACE_ID, traceId,
-                    LogKeys.EVENT_ID, tick.eventId(),
-                    LogKeys.EVENT_TYPE, tick.eventType().name(),
-                    LogKeys.SYMBOL, tick.symbol(),
-                    LogKeys.MSG, "publish tick"
-            )));
+//            Logs.APP.info(JsonLog.toJson(Map.of(
+//                    LogKeys.TS, System.currentTimeMillis(),
+//                    LogKeys.SCENE, "BUS",
+//                    LogKeys.TRACE_ID, traceId,
+//                    LogKeys.EVENT_ID, tick.eventId(),
+//                    LogKeys.EVENT_TYPE, tick.eventType().name(),
+//                    LogKeys.SYMBOL, tick.symbol(),
+//                    LogKeys.MSG, "publish tick"
+//            )));
 
             bus.publish(EventType.MARKET_TICK, tick);
             Thread.sleep(1000);

@@ -8,7 +8,7 @@ import com.xiang.zerotrade.domain.enums.EventType;
 
 public interface EventHandler<E> {
     /**
-     * 订阅的事件名
+     * 订阅的事件类型
      */
     EventType eventType();
 

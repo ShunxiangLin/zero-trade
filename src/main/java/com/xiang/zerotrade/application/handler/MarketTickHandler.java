@@ -6,6 +6,7 @@ import com.xiang.zerotrade.infrastructure.bus.EventBus;
 import com.xiang.zerotrade.infrastructure.logging.JsonLog;
 import com.xiang.zerotrade.infrastructure.logging.LogKeys;
 import com.xiang.zerotrade.infrastructure.logging.Logs;
+import com.xiang.zerotrade.infrastructure.logging.Trace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +15,11 @@ import java.util.Map;
 /**
  * @author linshunxiang
  */
-
 @Component
 @RequiredArgsConstructor
 public class MarketTickHandler implements EventHandler<Event> {
+
+    private final EventBus bus;
 
     @Override
     public EventType eventType() {
@@ -31,14 +33,18 @@ public class MarketTickHandler implements EventHandler<Event> {
 
     @Override
     public void handle(Event event) {
-        Logs.APP.info(JsonLog.toJson(Map.of(
-                LogKeys.TS, System.currentTimeMillis(),
-                LogKeys.SCENE, "HANDLER",
-                LogKeys.EVENT_ID, event.eventId(),
-                LogKeys.EVENT_TYPE, event.eventType().name(),
-                LogKeys.SYMBOL, event.symbol(),
-                LogKeys.MSG, "market tick handled"
-        )));
+        // 👇 P0：直接把信号“翻译”为下单请求
+        Event strategyEvent = new Event(
+                Trace.newEventId(),
+                EventType.ORDER_REQUEST,
+                System.currentTimeMillis(),
+                event.symbol(),
+                "side=BUY;qty=1;reason=strategySignal"
+        );
+
+        bus.publish(EventType.ORDER_REQUEST, strategyEvent);
+
+
     }
 
 

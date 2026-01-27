@@ -30,14 +30,7 @@ public class OrderRequestHandler implements EventHandler<Event> {
 
     @Override
     public void handle(Event event) {
-        Logs.APP.info(JsonLog.toJson(Map.of(
-                "ts", System.currentTimeMillis(),
-                "scene", "HANDLER",
-                "eventType", event.eventType().name(),
-                "symbol", event.symbol(),
-                "payload", event.payload(),
-                "msg", "order request received (simulate placing order)"
-        )));
+
         System.out.println("交易");
     }
 
