@@ -1,6 +1,6 @@
 package com.xiang.zerotrade.infrastructure.bus;
 
-import com.xiang.zerotrade.domain.enums.EventType;
+import com.xiang.zerotrade.domain.event.EventType;
 
 import java.util.function.Consumer;
 

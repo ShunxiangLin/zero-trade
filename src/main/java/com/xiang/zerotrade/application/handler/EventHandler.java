@@ -1,6 +1,6 @@
 package com.xiang.zerotrade.application.handler;
 
-import com.xiang.zerotrade.domain.enums.EventType;
+import com.xiang.zerotrade.domain.event.EventType;
 
 /**
  * @author linshunxiang

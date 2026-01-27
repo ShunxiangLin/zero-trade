@@ -1,6 +1,6 @@
 package com.xiang.zerotrade.infrastructure.bus.impl;
 
-import com.xiang.zerotrade.domain.enums.EventType;
+import com.xiang.zerotrade.domain.event.EventType;
 import com.xiang.zerotrade.infrastructure.bus.EventBus;
 import com.xiang.zerotrade.infrastructure.logging.JsonLog;
 import com.xiang.zerotrade.infrastructure.logging.LogKeys;
