@@ -77,7 +77,7 @@ public class LocalEventBus implements EventBus {
         handlers
                 .computeIfAbsent(type, __ -> new CopyOnWriteArrayList<>())
                 .add(new Registration(handlerName, boxed));
-        log.info("【EVENT订阅初始化】{} 成功注册 {} 时间", handlerName, type.name());
+        log.info("【EVENT订阅初始化】{} 成功注册 {} 事件", handlerName, type.name());
     }
 
 
@@ -89,15 +89,14 @@ public class LocalEventBus implements EventBus {
     }
 
     public void logSubscriptions() {
-        Logs.APP.info("======== EventBus Subscriptions ========");
+        log.info("======== EventBus Subscriptions ========");
 
         handlers.forEach((eventType, regs) -> {
-            Logs.APP.info("{}", eventType.name());
+            log.info("{}", eventType.name());
             for (Registration reg : regs) {
-                Logs.APP.info("  - {}", reg.name());
+                log.info("  - {}", reg.name());
             }
         });
-
-        Logs.APP.info("=======================================");
+        log.info("=======================================");
     }
 }

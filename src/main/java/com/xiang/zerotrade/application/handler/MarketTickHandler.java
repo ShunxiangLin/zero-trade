@@ -5,6 +5,7 @@ import com.xiang.zerotrade.domain.event.Event;
 import com.xiang.zerotrade.infrastructure.bus.EventBus;
 import com.xiang.zerotrade.infrastructure.logging.Trace;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class MarketTickHandler implements EventHandler<Event> {
 
     private final EventBus bus;
@@ -28,6 +30,7 @@ public class MarketTickHandler implements EventHandler<Event> {
 
     @Override
     public void handle(Event event) {
+        log.info("{}", event);
         // 👇 P0：直接把信号“翻译”为下单请求
 //        Event strategyEvent = new Event(
 //                Trace.newEventId(),

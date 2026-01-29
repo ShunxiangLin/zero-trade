@@ -1,4 +1,4 @@
-package com.xiang.zerotrade.common.util;
+package com.xiang.zerotrade.common.until;
 
 
 import org.springframework.web.reactive.socket.WebSocketMessage;
@@ -20,6 +20,10 @@ public class WebSocketHelper {
                         .doOnNext(messageHandler)
                         .then()
         ).subscribe();
+    }
+
+    public static void close(){
+
     }
 
 }

@@ -1,11 +1,15 @@
 package com.xiang.zerotrade.infrastructure.market;
 
+import com.xiang.zerotrade.domain.market.subscription.MarketSubscription;
+
+import java.util.List;
+
 /**
  * @author linshunxiang
  */
 
 public interface MarketDataSource {
-    void start();
+    void klineSubscriptionStart(List<MarketSubscription> subscriptionList);
 
     void stop();
 }

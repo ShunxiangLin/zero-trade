@@ -7,5 +7,5 @@ import com.xiang.zerotrade.domain.market.pair.Pair;
  */
 
 public interface MarketDataPublisher {
-    void publishTick(Pair pair, long price, long ts);
+    void publishTick(String msg);
 }

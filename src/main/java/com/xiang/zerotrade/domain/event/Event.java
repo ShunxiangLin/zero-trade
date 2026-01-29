@@ -14,6 +14,6 @@ public record Event(
         String eventId,
         EventType eventType,
         long ts,         // epoch millis
-        Pair pair,
+        int pairId,
         EventPayload payload   // P0: "price=65000" 这种就行
 ) {}

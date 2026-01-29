@@ -22,16 +22,16 @@ public class TestClass implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        log.info("========== PairMapper Smoke Test START ==========");
-
-        List<Pair> pairs = pairMapper.selectAll();
-
-        log.info("pair count={}", pairs.size());
-        for (Pair p : pairs) {
-            log.info("pair => {}", p);
-        }
-
-        log.info("========== PairMapper Smoke Test END ==========");
+//        log.info("========== PairMapper Smoke Test START ==========");
+//
+//        List<Pair> pairs = pairMapper.selectAll();
+//
+//        log.info("pair count={}", pairs.size());
+//        for (Pair p : pairs) {
+//            log.info("pair => {}", p);
+//        }
+//
+//        log.info("========== PairMapper Smoke Test END ==========");
 
     }
 }
