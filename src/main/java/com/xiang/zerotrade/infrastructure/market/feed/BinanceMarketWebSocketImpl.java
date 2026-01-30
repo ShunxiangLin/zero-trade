@@ -6,6 +6,7 @@ import com.xiang.zerotrade.domain.market.subscription.MarketSubscription;
 import com.xiang.zerotrade.infrastructure.market.MarketDataPublisher;
 import com.xiang.zerotrade.infrastructure.market.MarketDataSource;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
  * @author linshunxiang
  */
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class BinanceMarketWebSocketImpl implements MarketDataSource {
 
@@ -25,34 +27,30 @@ public class BinanceMarketWebSocketImpl implements MarketDataSource {
     public void klineSubscriptionStart(List<MarketSubscription> subscriptionList) {
         if (subscriptionList.isEmpty()) return;
 
+        // 根据市场 分组发送不同的URL
         Map<MarketType, List<MarketSubscription>> groupByMarketType = subscriptionList.stream()
                 .collect(Collectors.groupingBy(MarketSubscription::marketType));
 
+        // 拼接URL & 订阅
         for (Map.Entry<MarketType, List<MarketSubscription>> entry : groupByMarketType.entrySet()) {
             String url = buildCombinedKlineWsUrl(entry.getKey(), entry.getValue());
-
-            System.out.println("url = " + url);
-
             WebSocketHelper.subscribe(url, publisher::publishTick);
+            log.info("【初始化】订阅 {} WebSocket成功, type={}, url={}", entry.getValue().getFirst().streamType(),entry.getKey().name(), url);
         }
-
-
-        WebSocketHelper.subscribe("wss://stream.binance.com:9443/ws/btcusdt@kline_1m",
-                msg -> publisher.publishTick(msg)
-        );
     }
 
     private String buildCombinedKlineWsUrl(MarketType marketType, List<MarketSubscription> subscriptionList) {
+        String subscriptType = switch (subscriptionList.getFirst().streamType()){
+            case KLINE -> "@kline_1m";
+        };
         String streams = subscriptionList.stream()
-                .map(s -> s.symbol().toLowerCase() + "@kline_1m").collect(Collectors.joining("/"));
+                .map(s -> s.symbol().toLowerCase() + subscriptType).collect(Collectors.joining("/"));
         String base = switch (marketType) {
             case SPOT -> "wss://stream.binance.com:9443/stream?streams=";
             case FUTURES_USDT -> "wss://fstream.binance.com/stream?streams=";
             case FUTURES_COIN -> "wss://dstream.binance.com/stream?streams=";
         };
-
         return base + streams;
-
     }
 
 

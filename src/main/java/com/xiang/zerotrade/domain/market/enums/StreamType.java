@@ -6,5 +6,4 @@ package com.xiang.zerotrade.domain.market.enums;
  */
 public enum StreamType {
     KLINE,
-
 }
