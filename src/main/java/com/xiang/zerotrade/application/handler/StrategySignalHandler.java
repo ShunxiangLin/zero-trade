@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class StrategySignalHandler implements EventHandler<Event> {
+public class StrategySignalHandler implements EventHandler {
 
     private final EventBus bus;
 
@@ -23,11 +23,12 @@ public class StrategySignalHandler implements EventHandler<Event> {
 
     @Override
     public String name() {
-        return "StrategySignalHandler:handler";
+        return "策略处理器";
     }
 
     @Override
     public void handle(Event event) {
+        System.out.println("我是 stragtegy Handler收到了evetn:"+event);
 //        // P0先不下单，只打印模拟：
 //        // 后面你要做 ORDER_REQUEST 时，就在这里 bus.publish(ORDER_REQUEST, orderReq)
 //

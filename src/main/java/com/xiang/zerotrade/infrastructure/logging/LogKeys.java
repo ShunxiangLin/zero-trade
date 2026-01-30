@@ -8,19 +8,15 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class LogKeys {
-    public static final String TS = "ts";
-    public static final String TRACE_ID = "traceId";
-    public static final String EVENT_ID = "eventId";
-    public static final String EVENT_TYPE = "eventType";
-    public static final String STAGE = "stage";
     public static final String SCENE = "scene";
-    public static final String MSG = "msg";
-
-    public static final String METRIC = "metric";
-    public static final String HANDLER = "handler";
     public static final String OUTCOME = "outcome";
-    public static final String LATENCY_MS = "latencyMs";
-    public static final String ERROR_CODE = "errorCode";
+    public static final String EVENT_ID = "event_id";
+    public static final String EVENT_TYPE = "event_type";
+    public static final String HANDLER = "handler";
+    public static final String LATENCY_MS = "latency_ms";
     public static final String SYMBOL = "symbol";
-    public static final String STRATEGY = "strategy";
+    public static final String MARKET_TYPE = "market_type";
+    public static final String INTERVAL = "interval";
+    public static final String ERR = "err";
+    public static final String TRACE_ID = "trace_id";
 }

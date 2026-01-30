@@ -1,7 +1,5 @@
 package com.xiang.zerotrade.application.bootstrap;
 
-import com.xiang.zerotrade.infrastructure.market.MarketDataSource;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -16,13 +14,20 @@ import org.springframework.stereotype.Component;
 public class Startup {
 
     private final EventHandlerRegistrar eventHandlerRegistrar;
-    private final MarketDataSource marketDataSource;
+    private final MarketStartup marketStartup;
 
+    /**
+     * 项目启动初始化程序
+     */
     @EventListener(ApplicationReadyEvent.class)
     public void onReady(){
-        marketDataSource.start();
-
+        // 注册所有事件处理器
         eventHandlerRegistrar.registerAll();
+
+        // 启动行情订阅
+        marketStartup.klineSubscriptionStart();
+
+
 
     }
 }

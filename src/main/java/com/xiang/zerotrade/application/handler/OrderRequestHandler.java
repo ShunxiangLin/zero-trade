@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class OrderRequestHandler implements EventHandler<Event> {
+public class OrderRequestHandler implements EventHandler {
 
     @Override
     public EventType eventType() {
@@ -20,7 +20,7 @@ public class OrderRequestHandler implements EventHandler<Event> {
 
     @Override
     public String name() {
-        return "OrderRequestHandler:handler";
+        return "订单处理器";
     }
 
     @Override

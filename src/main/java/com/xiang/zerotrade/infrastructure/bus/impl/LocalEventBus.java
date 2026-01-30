@@ -1,5 +1,7 @@
 package com.xiang.zerotrade.infrastructure.bus.impl;
 
+import com.xiang.zerotrade.application.handler.EventHandler;
+import com.xiang.zerotrade.domain.event.Event;
 import com.xiang.zerotrade.domain.event.EventType;
 import com.xiang.zerotrade.infrastructure.bus.EventBus;
 import com.xiang.zerotrade.infrastructure.logging.JsonLog;
@@ -13,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Consumer;
 
 /**
  * @author linshunxiang
@@ -23,77 +24,48 @@ import java.util.function.Consumer;
 @Slf4j
 public class LocalEventBus implements EventBus {
 
-    private final Map<EventType, List<Registration>> handlers = new ConcurrentHashMap<>();
+    private final Map<EventType, List<EventHandler>> handleList = new ConcurrentHashMap<>();
 
-    private record Registration(String name, Consumer<Object> consumer) {
-    }
-
+    /**
+     * 向本地事件总线推送一个时间。
+     */
     @Override
-    public <E> void publish(EventType type, E event) {
-        List<Registration> list = handlers.get(type);
+    public void publish(Event event) {
+        // 获取订阅此EVENT的所有处理器
+        List<EventHandler> list = handleList.get(event.eventType());
         if (list == null || list.isEmpty()) return;
 
-        for (Registration reg : list) {
-            long t0 = System.nanoTime();
+        for (EventHandler handler : list) {
             try {
-                reg.consumer().accept(event);
-
-//                long latencyMs = (System.nanoTime() - t0) / 1_000_000;
-//                // 成功日志可先关（debug），避免太吵
-//                Logs.METRICS.info(JsonLog.toJson(Map.of(
-//                        LogKeys.TS, System.currentTimeMillis(),
-//                        LogKeys.SCENE, "BUS",
-//                        LogKeys.EVENT_TYPE, type.name(),
-//                        LogKeys.HANDLER, reg.name(),
-//                        LogKeys.OUTCOME, "SUCCESS",
-//                        LogKeys.LATENCY_MS, latencyMs,
-//                        LogKeys.MSG, "消息已处理"
-//                )));
+                handler.handle(event);
             } catch (Exception ex) {
-                long latencyMs = (System.nanoTime() - t0) / 1_000_000;
-
-                Map<String, Object> m = new LinkedHashMap<>();
-                m.put(LogKeys.TS, System.currentTimeMillis());
-                m.put(LogKeys.SCENE, "BUS");
-                m.put(LogKeys.EVENT_TYPE, type.name());
-                m.put(LogKeys.HANDLER, reg.name());
-                m.put(LogKeys.OUTCOME, "FAIL");
-                m.put(LogKeys.LATENCY_MS, latencyMs);
-                m.put("error", ex.getClass().getSimpleName());
-                m.put("errorMsg", safeMsg(ex.getMessage()));
-                m.put(LogKeys.MSG, "handler failed but event bus continued");
-
-                Logs.APP.error(JsonLog.toJson(m));
-                // 关键：不抛出，继续下一个 handler
+                log.error("{}处理异常", handler.name(), ex);
             }
         }
     }
 
+
+    /**
+     * 向本地事件总线注册一个事件处理器。
+     */
     @Override
-    public <E> void subscribe(EventType type, String handlerName, Consumer<E> handler) {
-        @SuppressWarnings("unchecked")
-        Consumer<Object> boxed = (Consumer<Object>) handler;
+    public void subscribe(EventHandler eventHandler) {
+        List<EventHandler> list = handleList.computeIfAbsent(eventHandler.eventType(), __ -> new CopyOnWriteArrayList<>());
 
-        handlers
-                .computeIfAbsent(type, __ -> new CopyOnWriteArrayList<>())
-                .add(new Registration(handlerName, boxed));
-        log.info("【EVENT订阅初始化】{} 成功注册 {} 事件", handlerName, type.name());
+        // 幂等保证：同一 EventType 下只允许存在一个同名 Handler
+        list.removeIf(h -> h.name().equals(eventHandler.name()));
+        list.add(eventHandler);
     }
 
 
-    private static String safeMsg(String msg) {
-        if (msg == null) {
-            return "";
-        }
-        return msg.length() > 200 ? msg.substring(0, 200) : msg;
-    }
-
+    /**
+     * 方便日志打印
+     */
     public void logSubscriptions() {
         log.info("======== EventBus Subscriptions ========");
-
-        handlers.forEach((eventType, regs) -> {
+        handleList.forEach((eventType, regs) -> {
             log.info("{}", eventType.name());
-            for (Registration reg : regs) {
+            for (EventHandler reg : regs) {
                 log.info("  - {}", reg.name());
             }
         });
