@@ -23,6 +23,7 @@ public class BinanceMarketDataPublisherImpl implements MarketDataPublisher {
         System.out.println(msg);
 
         // 推送Event
+        // #TODO
 
 //        bus.publish(event);
     }
