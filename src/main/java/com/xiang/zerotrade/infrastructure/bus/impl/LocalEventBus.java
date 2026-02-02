@@ -59,7 +59,7 @@ public class LocalEventBus implements EventBus {
 
 
     /**
-     * 方便日志打印
+     * 打印启动日志
      */
     public void logSubscriptions() {
         log.info("======== EventBus Subscriptions ========");

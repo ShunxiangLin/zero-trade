@@ -2,6 +2,7 @@ package com.xiang.zerotrade.domain.market.pair;
 
 import com.xiang.zerotrade.domain.market.enums.MarketType;
 import com.xiang.zerotrade.domain.market.enums.PairStatus;
+import lombok.Data;
 
 /**
  * @param id           数据库主键，仅用于持久化与追踪，不参与业务语义
@@ -17,19 +18,20 @@ import com.xiang.zerotrade.domain.market.enums.PairStatus;
  * @param feeRule      手续费规则，定义 maker / taker 费率
  * @author linshunxiang
  */
-public record Pair(
-        int id,
-        MarketType marketType,
-        String symbol,
-        String base,
-        String quote,
-        PairStatus status,
-        TradeRule tradeRule,
-        ContractRule contractRule,
-        Long onboardDate,
-        Long deliveryDate,
-        FeeRule feeRule
-) {
+@Data
+public class Pair {
+    int id;
+    MarketType marketType;
+    String symbol;
+    String base;
+    String quote;
+    PairStatus status;
+    TradeRule tradeRule;
+    FeeRule feeRule;
+    ContractRule contractRule;
+    Long onboardDate;
+    Long deliveryDate;
+
     @Override
     public String toString() {
         return new StringBuilder(256)

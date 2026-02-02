@@ -41,8 +41,6 @@ public class MarketStartup {
 
                 // U 本位合约
                 new MarketSubscription(FUTURES_USDT, "BTCUSDT", KLINE)
-
-
         );
     }
 

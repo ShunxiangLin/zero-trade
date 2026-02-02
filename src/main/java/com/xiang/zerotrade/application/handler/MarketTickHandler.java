@@ -43,6 +43,8 @@ public class MarketTickHandler implements EventHandler {
 
         Kline kline = payload.kline();
 
+        System.out.println(kline);
+
         // 异步保存Kline到数据库
         sideEffectExecutor.execute(() -> {
             try {

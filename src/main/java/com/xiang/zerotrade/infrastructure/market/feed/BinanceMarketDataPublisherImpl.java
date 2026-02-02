@@ -59,7 +59,7 @@ public class BinanceMarketDataPublisherImpl implements MarketDataPublisher {
 
     private Kline fromWebSocketJson(Pair pair, JsonNode json) {
         return Kline.builder()
-                .pairId(pair.id())
+                .pairId(pair.getId())
                 .openTime(json.path("t").asLong())
                 .closeTime(json.path("T").asLong())
                 .openPrice(new BigDecimal(json.path("o").asText()))

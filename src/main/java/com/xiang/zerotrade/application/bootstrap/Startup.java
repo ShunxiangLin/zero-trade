@@ -1,10 +1,13 @@
 package com.xiang.zerotrade.application.bootstrap;
 
+import com.xiang.zerotrade.domain.market.pair.Pair;
 import com.xiang.zerotrade.infrastructure.market.pair.PairCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @author shunxiang.lin
@@ -23,7 +26,7 @@ public class Startup {
      */
     @EventListener(ApplicationReadyEvent.class)
     public void onReady(){
-        // 注册所有事件处理器
+        // 注册所有事件 handler
         eventHandlerRegistrar.registerAll();
 
         // 加载DB Pair
@@ -31,8 +34,6 @@ public class Startup {
 
         // 启动行情订阅
         marketStartup.klineSubscriptionStart();
-
-
 
     }
 }

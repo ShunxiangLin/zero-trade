@@ -8,19 +8,19 @@
     <!-- ================= ResultMap ================= -->
 
     <resultMap id="PairResultMap" type="com.xiang.zerotrade.domain.market.pair.Pair">
-        <id     property="id"          column="id"/>
-        <result property="marketType"  column="market_type"/>
-        <result property="symbol"      column="symbol"/>
-        <result property="base"        column="base"/>
-        <result property="quote"       column="quote"/>
-        <result property="status"      column="status"/>
+        <id property="id" column="id"/>
+        <result property="marketType" column="market_type"/>
+        <result property="symbol" column="symbol"/>
+        <result property="base" column="base"/>
+        <result property="quote" column="quote"/>
+        <result property="status" column="status"/>
 
-        <result property="tradeRule"   column="trade_rule"
-                typeHandler="com.xiang.zerotrade.infrastructure.persistence.typeHandler.JsonTypeHandler"/>
-        <result property="feeRule"     column="fee_rule"
-                typeHandler="com.xiang.zerotrade.infrastructure.persistence.typeHandler.JsonTypeHandler"/>
-        <result property="contractRule"     column="contract_rule"
-                typeHandler="com.xiang.zerotrade.infrastructure.persistence.typeHandler.JsonTypeHandler"/>
+        <result property="tradeRule" column="trade_rule"
+                typeHandler="com.xiang.zerotrade.infrastructure.persistence.typeHandler.TradeRuleTypeHandler"/>
+        <result property="feeRule" column="fee_rule"
+                typeHandler="com.xiang.zerotrade.infrastructure.persistence.typeHandler.FeeRuleTypeHandler"/>
+        <result property="contractRule" column="contract_rule"
+                typeHandler="com.xiang.zerotrade.infrastructure.persistence.typeHandler.ContractRuleTypeHandler"/>
 
         <result property="onboardDate" column="onboard_date"/>
         <result property="deliveryDate" column="delivery_date"/>
@@ -44,61 +44,62 @@
 
     <!-- ================= Insert ================= -->
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO pair (
-        market_type, symbol, base_asset, quote_asset, status,
-        trade_rule, fee_rule,
-        onboard_date, delivery_date
-        )
-        VALUES (
-        #{marketType},
-        #{symbol},
-        #{base},
-        #{quote},
-        #{status},
-        #{tradeRule, typeHandler=com.xiang.zerotrade.infrastructure.persistence.typeHandler.JsonTypeHandler},
-        #{feeRule, typeHandler=com.xiang.zerotrade.infrastructure.persistence.typeHandler.JsonTypeHandler},
-        #{onboardDate},
-        #{deliveryDate}
-        )
-    </insert>
+    <!--    <insert id="insert" useGeneratedKeys="true" keyProperty="id">-->
+    <!--        INSERT INTO pair (-->
+    <!--        market_type, symbol, base_asset, quote_asset, status,-->
+    <!--        trade_rule, fee_rule,-->
+    <!--        onboard_date, delivery_date-->
+    <!--        )-->
+    <!--        VALUES (-->
+    <!--        #{marketType},-->
+    <!--        #{symbol},-->
+    <!--        #{base},-->
+    <!--        #{quote},-->
+    <!--        #{status},-->
+    <!--        #{tradeRule, typeHandler=com.xiang.zerotrade.infrastructure.persistence.typeHandler.JsonTypeHandler},-->
+    <!--        #{feeRule, typeHandler=com.xiang.zerotrade.infrastructure.persistence.typeHandler.JsonTypeHandler},-->
+    <!--        #{onboardDate},-->
+    <!--        #{deliveryDate}-->
+    <!--        )-->
+    <!--    </insert>-->
 
     <!-- ================= Update ================= -->
 
-    <update id="update">
-        UPDATE pair
-        SET
-        status        = #{status},
-        trade_rule    = #{tradeRule, typeHandler=com.xiang.zerotrade.infrastructure.persistence.typeHandler.JsonTypeHandler},
-        fee_rule      = #{feeRule, typeHandler=com.xiang.zerotrade.infrastructure.persistence.typeHandler.JsonTypeHandler},
-        onboard_date  = #{onboardDate},
-        delivery_date = #{deliveryDate}
-        WHERE id = #{id}
-    </update>
+    <!--    <update id="update">-->
+    <!--        UPDATE pair-->
+    <!--        SET-->
+    <!--        status        = #{status},-->
+    <!--        trade_rule    = #{tradeRule, typeHandler=com.xiang.zerotrade.infrastructure.persistence.typeHandler.JsonTypeHandler},-->
+    <!--        fee_rule      = #{feeRule, typeHandler=com.xiang.zerotrade.infrastructure.persistence.typeHandler.JsonTypeHandler},-->
+    <!--        onboard_date  = #{onboardDate},-->
+    <!--        delivery_date = #{deliveryDate}-->
+    <!--        WHERE id = #{id}-->
+    <!--    </update>-->
 
     <!-- ================= Select ================= -->
 
-    <select id="findById" resultMap="PairResultMap">
-        SELECT <include refid="BaseColumns"/>
-        FROM pair
-        WHERE id = #{id}
-    </select>
+    <!--    <select id="findById" resultMap="PairResultMap">-->
+    <!--        SELECT <include refid="BaseColumns"/>-->
+    <!--        FROM pair-->
+    <!--        WHERE id = #{id}-->
+    <!--    </select>-->
 
-    <select id="findByMarketAndSymbol" resultMap="PairResultMap">
-        SELECT <include refid="BaseColumns"/>
-        FROM pair
-        WHERE market_type = #{marketType}
-        AND symbol = #{symbol}
-    </select>
+    <!--    <select id="findByMarketAndSymbol" resultMap="PairResultMap">-->
+    <!--        SELECT <include refid="BaseColumns"/>-->
+    <!--        FROM pair-->
+    <!--        WHERE market_type = #{marketType}-->
+    <!--        AND symbol = #{symbol}-->
+    <!--    </select>-->
 
-    <select id="findByMarket" resultMap="PairResultMap">
-        SELECT <include refid="BaseColumns"/>
-        FROM pair
-        WHERE market_type = #{marketType}
-    </select>
+    <!--    <select id="findByMarket" resultMap="PairResultMap">-->
+    <!--        SELECT <include refid="BaseColumns"/>-->
+    <!--        FROM pair-->
+    <!--        WHERE market_type = #{marketType}-->
+    <!--    </select>-->
 
     <select id="selectAll" resultMap="PairResultMap">
-        SELECT <include refid="BaseColumns"/>
+        SELECT
+        <include refid="BaseColumns"/>
         FROM pair
     </select>
 
