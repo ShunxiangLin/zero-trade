@@ -40,7 +40,7 @@ public class KlineWebSocket {
 
     private String buildCombinedKlineWsUrl(MarketType marketType, List<MarketSubscription> subscriptionList) {
         String subscriptType = switch (subscriptionList.getFirst().streamType()) {
-            case KLINE -> "@kline_1m";
+            case KLINE -> "@kline_5m";
         };
         String streams = subscriptionList.stream()
                 .map(s -> s.symbol().toLowerCase() + subscriptType).collect(Collectors.joining("/"));

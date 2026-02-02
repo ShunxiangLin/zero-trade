@@ -57,10 +57,10 @@ public class KlinePublisher {
     private Kline fromWebSocketJson(Pair pair, JsonNode json) {
         return Kline.builder()
                 .pairId(pair.getId())
-                .interval(Interval.M1)
+                .intervalSec(300)
                 .openTime(json.path("t").asLong())
                 .closeTime(json.path("T").asLong())
-                .openPrice(json.path("o").decimalValue())
+                .openPrice(new BigDecimal(json.path("o").asText()))
                 .closePrice(new BigDecimal(json.path("c").asText()))
                 .highPrice(new BigDecimal(json.path("h").asText()))
                 .lowPrice(new BigDecimal(json.path("l").asText()))

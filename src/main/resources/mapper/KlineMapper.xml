@@ -8,12 +8,12 @@
     <insert id="upsert">
 
         INSERT INTO kline (
-        pair_id, `interval`,open_time, close_time, open_price, close_price, high_price, low_price, volume
+        pair_id, `interval_sec`,open_time, close_time, open_price, close_price, high_price, low_price, volume
         ) VALUES
         <foreach collection="list" item="k" separator=",">
             (
             #{k.pairId},
-            #{k.interval},
+            #{k.intervalSec},
             #{k.openTime},
             #{k.closeTime},
             #{k.openPrice},
@@ -30,6 +30,5 @@
         high_price = VALUES(high_price),
         low_price = VALUES(low_price),
         volume = VALUES(volume)
-
     </insert>
 </mapper>

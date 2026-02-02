@@ -35,7 +35,7 @@ public class KlineRestClient {
     private List<Kline> fetchKline(Pair pair, String baseUrl, String path, Long startTime, Long endTime) {
         String uri = path
                      + "?symbol=" + pair.getSymbol()
-                     + "&interval=1m"
+                     + "&interval=5m"
                      + "&startTime=" + startTime
                      + "&endTime=" + endTime;
         String response = restHelper.get(baseUrl, uri, String.class);

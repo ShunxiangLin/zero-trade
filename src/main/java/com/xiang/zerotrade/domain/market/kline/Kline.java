@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Builder
 public record Kline(
         int pairId,
-        Interval interval,
+        int intervalSec,
         long openTime,
         long closeTime,
         BigDecimal openPrice,

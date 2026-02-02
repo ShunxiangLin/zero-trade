@@ -1,6 +1,7 @@
 package com.xiang.zerotrade.application.bootstrap;
 
 import com.xiang.zerotrade.application.handler.EventHandler;
+import com.xiang.zerotrade.common.until.FormatUtil;
 import com.xiang.zerotrade.domain.market.enums.MarketType;
 import com.xiang.zerotrade.domain.market.kline.Kline;
 import com.xiang.zerotrade.domain.market.pair.Pair;
@@ -54,12 +55,14 @@ public class Startup {
     }
 
     public void initMarketData() {
-        // 是否要初始化
+        // 是否要初始化 当前时间 - 2天的连续K线
+        long end = System.currentTimeMillis();
+        long checkStart = end - 1_000 * 60 * 48;
+
 
         // 初始化数据
         Pair pair = pairCache.getPairBySymbol("BTCUSDT", MarketType.FUTURES_USDT);
 
-        long end = System.currentTimeMillis();
         long start = end - 60_000 * 10;
 
         List<Kline> klines = klineRestClient.fetchKines(pair, start, end);
@@ -69,13 +72,18 @@ public class Startup {
                 log.info(
                         "pairId={} openTime={} open={}",
                         k.pairId(),
-                        k.openTime(),
+                        FormatUtil.formatTimestamp(k.openTime()),
                         k.openPrice()
                 )
         );
         log.info("total klines = {}", klines.size());
         log.info("================================");
         // 发送通知
+    }
+
+    private boolean shouldInit(Pair pair) {
+        long end = System.currentTimeMillis();
+        long checkStart = end - 1_000 * 60 * 60 * 48;
     }
 
 
