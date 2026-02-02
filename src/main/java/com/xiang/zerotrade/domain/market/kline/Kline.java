@@ -2,6 +2,7 @@ package com.xiang.zerotrade.domain.market.kline;
 
 import com.xiang.zerotrade.common.until.FormatUtil;
 import com.xiang.zerotrade.domain.market.pair.Pair;
+import lombok.Builder;
 
 import java.math.BigDecimal;
 
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
  * @author linshunxiang
  */
 
+@Builder
 public record Kline(
         long pairId,
         long openTime,

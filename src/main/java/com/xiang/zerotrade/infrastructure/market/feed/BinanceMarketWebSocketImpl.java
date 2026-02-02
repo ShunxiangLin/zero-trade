@@ -34,13 +34,13 @@ public class BinanceMarketWebSocketImpl implements MarketDataSource {
         // 拼接URL & 订阅
         for (Map.Entry<MarketType, List<MarketSubscription>> entry : groupByMarketType.entrySet()) {
             String url = buildCombinedKlineWsUrl(entry.getKey(), entry.getValue());
-            WebSocketHelper.subscribe(url, publisher::publishTick);
-            log.info("【初始化】订阅 {} WebSocket成功, type={}, url={}", entry.getValue().getFirst().streamType(),entry.getKey().name(), url);
+            WebSocketHelper.subscribe(url, msg -> publisher.publishTick(entry.getKey(), msg));
+            log.info("【初始化】订阅 {} WebSocket成功, type={}, url={}", entry.getValue().getFirst().streamType(), entry.getKey().name(), url);
         }
     }
 
     private String buildCombinedKlineWsUrl(MarketType marketType, List<MarketSubscription> subscriptionList) {
-        String subscriptType = switch (subscriptionList.getFirst().streamType()){
+        String subscriptType = switch (subscriptionList.getFirst().streamType()) {
             case KLINE -> "@kline_1m";
         };
         String streams = subscriptionList.stream()
