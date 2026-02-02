@@ -100,7 +100,7 @@
     <select id="selectAll" resultMap="PairResultMap">
         SELECT
         <include refid="BaseColumns"/>
-        FROM pair
+        FROM pair where status = 'TRADING'
     </select>
 
     <!-- ================= Delete ================= -->

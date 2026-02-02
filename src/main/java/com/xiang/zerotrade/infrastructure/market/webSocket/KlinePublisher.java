@@ -1,12 +1,16 @@
-package com.xiang.zerotrade.infrastructure.market.feed;
+package com.xiang.zerotrade.infrastructure.market.webSocket;
 
 
+import com.xiang.zerotrade.domain.event.Event;
+import com.xiang.zerotrade.domain.event.EventType;
+import com.xiang.zerotrade.domain.event.payloadImpl.MarketTickPayload;
+import com.xiang.zerotrade.domain.market.enums.Interval;
 import com.xiang.zerotrade.domain.market.enums.MarketType;
 import com.xiang.zerotrade.domain.market.kline.Kline;
 import com.xiang.zerotrade.domain.market.pair.Pair;
 import com.xiang.zerotrade.infrastructure.bus.impl.LocalEventBus;
-import com.xiang.zerotrade.infrastructure.market.MarketDataPublisher;
-import com.xiang.zerotrade.infrastructure.market.pair.PairCache;
+import com.xiang.zerotrade.infrastructure.market.cache.PairCache;
+import com.xiang.zerotrade.common.until.EventIdGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.JsonNode;
@@ -21,26 +25,20 @@ import java.math.BigDecimal;
  */
 @Component
 @RequiredArgsConstructor
-public class BinanceMarketDataPublisherImpl implements MarketDataPublisher {
+public class KlinePublisher {
 
     private final LocalEventBus bus;
     private final ObjectMapper objectMapper;
     private final PairCache pairCache;
+    private final EventIdGenerator eventIdGenerator;
 
-    @Override
     public void publishTick(MarketType marketType, String msg) {
         // 解析msg
         Kline kline = parseMsg(marketType, msg);
         if (kline == null) {
             return;
         }
-        System.out.println(kline);
-
-
-        // 推送Event
-        // #TODO
-
-//        bus.publish(event);
+        bus.publish(new Event(eventIdGenerator.nextId(), EventType.MARKET_TICK, System.currentTimeMillis(), kline.pairId(), new MarketTickPayload(kline)));
     }
 
     private Kline parseMsg(MarketType marketType, String msg) {
@@ -51,18 +49,18 @@ public class BinanceMarketDataPublisherImpl implements MarketDataPublisher {
         if (!data.path("x").asBoolean()) {
             return null;
         }
-        Pair pair = pairCache.getPairBySymbol(data.path('s').asText(), marketType);
+
+        Pair pair = pairCache.getPairBySymbol(root.path("data").path("s").asText(), marketType);
         return fromWebSocketJson(pair, data);
-
-
     }
 
     private Kline fromWebSocketJson(Pair pair, JsonNode json) {
         return Kline.builder()
                 .pairId(pair.getId())
+                .interval(Interval.M1)
                 .openTime(json.path("t").asLong())
                 .closeTime(json.path("T").asLong())
-                .openPrice(new BigDecimal(json.path("o").asText()))
+                .openPrice(json.path("o").decimalValue())
                 .closePrice(new BigDecimal(json.path("c").asText()))
                 .highPrice(new BigDecimal(json.path("h").asText()))
                 .lowPrice(new BigDecimal(json.path("l").asText()))

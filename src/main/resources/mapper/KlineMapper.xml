@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiang.zerotrade.infrastructure.persistence.mapper.KlineMapper">
+
+    <insert id="upsert">
+
+        INSERT INTO kline (
+        pair_id, `interval`,open_time, close_time, open_price, close_price, high_price, low_price, volume
+        ) VALUES
+        <foreach collection="list" item="k" separator=",">
+            (
+            #{k.pairId},
+            #{k.interval},
+            #{k.openTime},
+            #{k.closeTime},
+            #{k.openPrice},
+            #{k.closePrice},
+            #{k.highPrice},
+            #{k.lowPrice},
+            #{k.volume}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        close_time = VALUES(close_time),
+        open_price = VALUES(open_price),
+        close_price = VALUES(close_price),
+        high_price = VALUES(high_price),
+        low_price = VALUES(low_price),
+        volume = VALUES(volume)
+
+    </insert>
+</mapper>

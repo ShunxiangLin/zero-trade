@@ -1,4 +1,4 @@
-package com.xiang.zerotrade.infrastructure.market.pair;
+package com.xiang.zerotrade.infrastructure.market.cache;
 
 import com.xiang.zerotrade.domain.market.enums.MarketType;
 import com.xiang.zerotrade.domain.market.pair.Pair;
@@ -27,18 +27,32 @@ public class PairCache {
 
     public Pair getPairBySymbol(String symbol, MarketType type) {
         return registryPairList.stream()
-//                .filter(pair -> pair.symbol().equals(symbol) && pair.marketType() == type)
+                .filter(pair -> pair.getSymbol().equals(symbol) && pair.getMarketType() == type)
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException(
                         "Pair not found in cache: symbol=" + symbol + ", type=" + type
                 ));
     }
 
-    // P0：启动加载一次即可
-    public void loadAll(){
-        registryPairList.addAll(pairMapper.selectAll());
-        log.info("======== 加载Pair ========");
+    public Pair getPairById(Integer pair_id) {
+        return registryPairList.stream()
+                .filter(pair -> pair.getId() == pair_id)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException(
+                        "Pair not found in cache: id=" + pair_id));
+    }
 
+    // P0：启动加载一次即可
+    public void loadAll() {
+        registryPairList.addAll(pairMapper.selectAll());
+    }
+
+    public List<Pair> getAll() {
+        return List.copyOf(registryPairList);
+    }
+
+    public void logsPair() {
+        log.info("======== 加载Pair ========");
         Map<MarketType, List<Pair>> grouped =
                 registryPairList.stream().collect(Collectors.groupingBy(Pair::getMarketType));
 
@@ -48,7 +62,6 @@ public class PairCache {
                 log.info("  - {}", pair.getSymbol());
             }
         });
-
         log.info("=======================================");
     }
 

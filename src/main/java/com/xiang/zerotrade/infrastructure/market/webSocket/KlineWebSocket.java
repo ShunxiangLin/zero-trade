@@ -1,10 +1,8 @@
-package com.xiang.zerotrade.infrastructure.market.feed;
+package com.xiang.zerotrade.infrastructure.market.webSocket;
 
 import com.xiang.zerotrade.common.until.WebSocketHelper;
 import com.xiang.zerotrade.domain.market.enums.MarketType;
 import com.xiang.zerotrade.domain.market.subscription.MarketSubscription;
-import com.xiang.zerotrade.infrastructure.market.MarketDataPublisher;
-import com.xiang.zerotrade.infrastructure.market.MarketDataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,13 +17,14 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class BinanceMarketWebSocketImpl implements MarketDataSource {
+public class KlineWebSocket {
 
-    private final MarketDataPublisher publisher;
+    private final KlinePublisher publisher;
 
-    @Override
     public void klineSubscriptionStart(List<MarketSubscription> subscriptionList) {
-        if (subscriptionList.isEmpty()) return;
+        if (subscriptionList.isEmpty()) {
+            return;
+        }
 
         // 根据市场 分组发送不同的URL
         Map<MarketType, List<MarketSubscription>> groupByMarketType = subscriptionList.stream()
@@ -54,7 +53,6 @@ public class BinanceMarketWebSocketImpl implements MarketDataSource {
     }
 
 
-    @Override
     public void stop() {
         WebSocketHelper.close();
     }

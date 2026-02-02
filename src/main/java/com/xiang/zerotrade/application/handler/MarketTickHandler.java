@@ -7,11 +7,13 @@ import com.xiang.zerotrade.domain.event.payloadImpl.StrategySignalPayload;
 import com.xiang.zerotrade.domain.market.kline.Kline;
 import com.xiang.zerotrade.infrastructure.bus.EventBus;
 import com.xiang.zerotrade.infrastructure.logging.Trace;
+import com.xiang.zerotrade.infrastructure.persistence.mapper.KlineMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 
 /**
@@ -24,6 +26,7 @@ public class MarketTickHandler implements EventHandler {
 
     private final Executor sideEffectExecutor;
     private final EventBus bus;
+    private final KlineMapper klineMapper;
 
     @Override
     public EventType eventType() {
@@ -37,18 +40,18 @@ public class MarketTickHandler implements EventHandler {
 
     @Override
     public void handle(Event event) {
+        System.out.println("11");
         if (!(event.payload() instanceof MarketTickPayload payload)) {
             throw new IllegalStateException("MARKET_TICK event payload is not MarketTickPayload");
         }
 
         Kline kline = payload.kline();
 
-        System.out.println(kline);
-
         // 异步保存Kline到数据库
         sideEffectExecutor.execute(() -> {
             try {
                 // db 操作
+                klineMapper.upsert(List.of(kline));
             } catch (Exception e) {
                 log.error("数据库操作失败", e);
             }
